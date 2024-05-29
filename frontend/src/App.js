@@ -8,15 +8,26 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useReducer } from "react";
 import usersReducer from "./Reducers/usersReducer";
 import filesReducer from "./Reducers/filesReducer";
-import selectedFilesReducer from "./Reducers/sharedFilesReducer";
+import sharedFilesReducer from "./Reducers/sharedFilesReducer";
 import { UsersContext } from "./ContextApi/usersContext";
 import { FilesContext } from "./ContextApi/filesContext";
 import { SharedFilesContext } from "./ContextApi/sharedFilesContext";
 import axios from "axios";
 
+const filesInitialState = {
+  data: [],
+  serverErrors: null
+}
+
+const sharedFilesInitialState = {
+  data: [],
+  serverErrors: null
+}
 
 function App() {
   const [users, usersDispatch] = useReducer(usersReducer,null)
+  const [files, filesDispatch] = useReducer(filesReducer,filesInitialState)
+  const [sharedFiles, sharedFilesDispatch] = useReducer(sharedFilesReducer,sharedFilesInitialState)
 
   useEffect(()=>{
     (async function(){
@@ -28,7 +39,6 @@ function App() {
            Authorization: token
           }
           })
-          console.log(userResponse.data)
           usersDispatch({type: 'SET_USER',payload: userResponse.data})
         }
       } catch(err) {
@@ -40,6 +50,8 @@ function App() {
   return (
     <div>
       <UsersContext.Provider value={{users, usersDispatch}}>
+      <FilesContext.Provider value={{files, filesDispatch}}>
+      <SharedFilesContext.Provider value={{sharedFiles, sharedFilesDispatch}}>
       <NavBar/>
       <Container sx={{ paddingTop: '100px' }}>
       <Routes>
@@ -48,6 +60,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard/>}/>
       </Routes>
       </Container>
+      </SharedFilesContext.Provider>
+      </FilesContext.Provider>
       </UsersContext.Provider>
     </div>
   );

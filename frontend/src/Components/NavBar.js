@@ -25,7 +25,7 @@ export default function NavBar() {
         usersDispatch({type: 'HANDLE_LOGOUT'});
         navigate("/");
       };
-      console.log('users',users)
+  
     
     return (
         <Box sx={{ flexGrow: 1 }}>
