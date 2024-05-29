@@ -5,8 +5,9 @@ const filesSchema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: 'User'
     },
-    filename: String,
-    filePath: String
+    fileName: String,
+    filePath: String,
+    fileSize: Number
 },{timestamps:true});
 
 const File = model('File', filesSchema)

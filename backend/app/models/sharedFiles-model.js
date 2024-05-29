@@ -1,12 +1,12 @@
 const { Schema , model } = require('mongoose')
 
 const sharedFilesSchema= new Schema({
-    file: {
-        type: mongoose.Schema.Types.ObjectId,
+    fileId: {
+        type: Schema.Types.ObjectId,
         ref: 'File'
     },
-    sharedWith: { 
-        type: mongoose.Schema.Types.ObjectId, 
+    sharedWithUserId: { 
+        type: Schema.Types.ObjectId, 
         ref: 'User'
     },
     accessExpiry: Date
