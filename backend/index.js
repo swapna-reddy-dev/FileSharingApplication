@@ -3,7 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const {checkSchema} = require('express-validator')
 const app = express()
-const port = 3000
+const port = 3001
 
 const fileRouter = require('./app/routes/file-Routes')
 
