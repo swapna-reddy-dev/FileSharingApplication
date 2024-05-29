@@ -2,10 +2,11 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react"
 import { FilesContext } from "../ContextApi/filesContext";
 import { SharedFilesContext } from "../ContextApi/sharedFilesContext";
-import { Container, Grid, Typography, MenuItem, Select, Box, Button,Dialog, DialogTitle, DialogContent, DialogActions, TextField  } from '@mui/material';
+import { Container, Grid, Typography, MenuItem, Select, Box, Button,Dialog } from '@mui/material';
 import AddSharpIcon from "@mui/icons-material/AddSharp";
 import SendIcon from '@mui/icons-material/Send';
 import UploadFileForm from "./uploadFileForm";
+import ShareFileForm from "./ShareForm";
 
 
 export default function Dashboard() {
@@ -15,6 +16,7 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(false)
     const [openUpload, setOpenUpload] = useState(false)
     const [openShare, setOpenShare] = useState(false)
+    const [fileId, setFileId] = useState('')
 
     const handleUploadOpen = () => {
         setOpenUpload(true)
@@ -24,7 +26,8 @@ export default function Dashboard() {
         setOpenUpload(false)
     }
 
-    const handleShareOpen = () => {
+    const handleShareOpen = (id) => {
+        setFileId(id)
         setOpenShare(true)
     }
 
@@ -65,7 +68,7 @@ export default function Dashboard() {
 
     return (
 <Container maxWidth="lg" sx={{ marginTop: '20px' }}>
-    {files.data.length && (
+    {/* {files.data.length && ( */}
         <Grid container spacing={2} alignItems="center">
         <Grid item xs={6}>
           <Typography variant="h6" fontWeight="bold">
@@ -102,7 +105,7 @@ export default function Dashboard() {
           </Button>
         </Grid>
       </Grid>
-      )}
+      {/* )} */}
 
       <Box mt={4}>
         {loading ? (
@@ -131,7 +134,7 @@ export default function Dashboard() {
                   <Button
                     variant="contained"
                     color="secondary"
-                    onClick={handleShareOpen}
+                    onClick={()=>{handleShareOpen(file._id)}}
                     startIcon={<SendIcon/>}
                     sx={{
                       backgroundColor: "#A00DB8",
@@ -188,6 +191,11 @@ export default function Dashboard() {
          {/*for uploading the files */}
       <Dialog open={openUpload} onClose={handleUploadClose}>
         <UploadFileForm handleUploadClose={handleUploadClose} filesDispatch={filesDispatch}/>
+      </Dialog>
+
+      {/*for sharing the files */}
+      <Dialog open={openShare} onClose={handleShareClose}>
+        <ShareFileForm fileId={fileId} files={files} handleShareClose={handleShareClose} sharedFilesDispatch={sharedFilesDispatch}/>
       </Dialog>
     </Container>
     )

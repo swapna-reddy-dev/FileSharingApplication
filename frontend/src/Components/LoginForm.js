@@ -45,7 +45,8 @@ export default function LoginForm() {
                     }
                 })
                 usersDispatch({type: 'SET_USER',payload: userResponse.data})
-                //console.log(userResponse.data)
+                
+                
 
                 setEmail('')
                 setPassword('')

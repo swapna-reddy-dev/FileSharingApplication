@@ -38,6 +38,8 @@ app.post('/api/users/login',checkSchema(userLoginValidationSchema), usersCltr.lo
 //User Account 
 app.get('/api/users/account',authenticateUser,usersCltr.account)
 
+//All users
+app.get('/api/users',usersCltr.getUsers)
 //Files
 app.use('/api/files',fileRouter)
 

@@ -68,4 +68,14 @@ usersCltr.account = async (req,res) => {
     }
 }
 
+usersCltr.getUsers = async (req,res) => {
+    try{
+        const users = await User.find()
+        return res.status(201).json(users)
+    } catch(err){
+        console.log(err)
+        res.status(500).json({errors:'Internal Server Error'})
+    }
+}
+
 module.exports = usersCltr

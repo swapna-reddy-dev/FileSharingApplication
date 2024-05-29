@@ -7,7 +7,8 @@ const filesSchema = new Schema({
     },
     fileName: String,
     filePath: String,
-    fileSize: Number
+    fileSize: Number,
+    humanFileSize: String
 },{timestamps:true});
 
 const File = model('File', filesSchema)

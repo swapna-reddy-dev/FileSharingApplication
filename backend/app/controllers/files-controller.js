@@ -13,7 +13,7 @@ filesCtrl.upload = async (req,res) =>{
         return res.status(400).json({errors:errors.array()})
     }
     const { filename, path: filePath } = req.file;
-    //console.log(req.file)
+    console.log(req.file)
     try {
         const fileStats = fs.statSync(filePath);  // Get file stats to determine file size
         const fileSize = fileStats.size;  // Get file size in bytes
@@ -27,6 +27,7 @@ filesCtrl.upload = async (req,res) =>{
         }
         body.filePath = filePath
         body.fileSize = fileSize
+        body.humanFileSize = humanFileSize(fileSize)
         const file = new File(body)
         await file.save();
         res.status(201).json(file);
