@@ -11,7 +11,6 @@ usersCltr.register = async(req,res)=>{
         return res.status(400).json({errors:errors.array()})
     }
     try{
-        //sanitizing input data using loadash
         const body = pick(req.body,['username','email','password'])
         const user = new User(body)
         const salt = await bcryptjs.genSalt()

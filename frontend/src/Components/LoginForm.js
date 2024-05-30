@@ -1,13 +1,17 @@
 import { Box, Grid, Typography, Divider, Stack, TextField, Button, Alert } from "@mui/material";
 import { useContext, useState } from "react";
 import {toast , ToastContainer} from 'react-toastify' 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios'
 import { UsersContext } from "../ContextApi/usersContext";
 
 export default function LoginForm() {
     const navigate = useNavigate()
+    const location = useLocation()
     const {usersDispatch} = useContext(UsersContext)
+
+    //to redirect to success page 
+    const fileId = location.state?.id
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -54,7 +58,11 @@ export default function LoginForm() {
                 toast.success('Successfully Logged In!', {
                     autoClose: 500,
                     onClose: () => {
-                        navigate("/dashboard")
+                        if(fileId) {
+                          navigate(`/view-shared-file/${fileId}`)
+                        } else {
+                          navigate("/")
+                        }
                     }
                   })
                 

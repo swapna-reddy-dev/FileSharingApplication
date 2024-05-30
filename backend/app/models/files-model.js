@@ -7,8 +7,11 @@ const filesSchema = new Schema({
     },
     fileName: String,
     filePath: String,
-    fileSize: Number,
-    humanFileSize: String
+    humanFileSize: String,
+    sharedWith: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 },{timestamps:true});
 
 const File = model('File', filesSchema)

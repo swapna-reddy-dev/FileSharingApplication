@@ -2,6 +2,8 @@ import { Box, Button, Divider, Stack, TextField, Typography } from '@mui/materia
 import { useState } from 'react';
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from 'axios';
+import {toast , ToastContainer} from 'react-toastify' 
+
 
 
 export default function UploadFileForm({handleUploadClose,filesDispatch}) {
@@ -34,8 +36,11 @@ export default function UploadFileForm({handleUploadClose,filesDispatch}) {
             console.log(response.data)
             filesDispatch({type: 'ADD_FILE',payload: response.data})
             setUpload({fileName: '', file: ''})
-            alert('succesfully uploaded')
-            handleUploadClose()
+            toast.success("Successfully Uploaded!",{
+                autoClose:1000,
+                onClose:()=>handleUploadClose()
+              });
+            
 
         } catch(err) {
             console.log(err)
@@ -45,6 +50,7 @@ export default function UploadFileForm({handleUploadClose,filesDispatch}) {
     
     return (
         <Box p={3} borderRadius={2} boxShadow={3} bgcolor="background.paper" width={400}>
+            <ToastContainer position='top-center'/>
             <Typography variant="h6" textAlign='center' fontWeight='bold' sx={{marginBottom: '10px'}}>
                 Upload File
             </Typography>
@@ -66,7 +72,7 @@ export default function UploadFileForm({handleUploadClose,filesDispatch}) {
             <input
             type="file"
             name='file'
-            accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+            accept=".pdf"
             onChange={handleChange}
             style={{ display: 'none' }}
             id="file-upload"

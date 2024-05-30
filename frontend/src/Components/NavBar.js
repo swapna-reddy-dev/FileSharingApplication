@@ -18,12 +18,12 @@ export default function NavBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-    // const token = localStorage.getItem('token')
+    
     const handleLogOut = () => {
         handleClose();
         localStorage.clear();
         usersDispatch({type: 'HANDLE_LOGOUT'});
-        navigate("/");
+        navigate("/login");
       };
   
     
@@ -54,7 +54,7 @@ export default function NavBar() {
                     <Button component={Link} to="/register" color="inherit">
                         SignUp
                     </Button>
-                    <Button component={Link} to="/" color="inherit">
+                    <Button component={Link} to="/login" color="inherit">
                         Login
                     </Button>
                     </>  
@@ -62,10 +62,11 @@ export default function NavBar() {
                     <>
                     <Tooltip title="Home">
                     <IconButton>
-                    
+                        <Link to={'/'}>
                         <HomeRoundedIcon
                         style={{ fontSize: "40px", color: "#FFFFFF" }}
                         />
+                        </Link>
                    
                     </IconButton>
                     </Tooltip>
@@ -115,79 +116,6 @@ export default function NavBar() {
                     </Grid>
                     </Grid>
                 </Toolbar>
-                {/* <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{ flexGrow: 1 }}
-                    color="#27438e"
-                    fontWeight="bold"
-            >
-              File Sharing System
-            </Typography>
-            <Stack direction="row" alignItems="center" spacing={1}>
-                {!token ? (
-                    <>
-                    <Button>
-                        SignUp
-                    </Button>
-                    <Button>
-                        Login
-                    </Button>
-                    </>  
-                ) : (
-                    <>
-                    <Tooltip title="Home">
-                    <IconButton>
-                    
-                        <HomeRoundedIcon
-                        style={{ fontSize: "40px", color: "#27438e" }}
-                        />
-                   
-                    </IconButton>
-                    </Tooltip>
-                    <Tooltip title="View profile">
-                        <IconButton onClick={handleClick} sx={{ p: 0 }}>
-                        <FaUser style={{ color: "#27438e", fontSize: "28px" }} />
-                        </IconButton>
-                    </Tooltip>
-                    <Menu
-                        sx={{
-                        mt: "45px",
-                        "& .MuiMenu-paper": {
-                            backgroundColor: "white",
-                            color: "#375ab2",
-                            fontWeight: "bold",
-                        },
-                        }}
-                        anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                        }}
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                    >
-                        <Typography variant="body1" textAlign="center" sx={{ px: 2, py: 1 }}>
-                        Name
-                        </Typography>
-                        <Typography variant="body1" sx={{ px: 2, py: 1 }}>
-                        email 
-                        </Typography>
-                        <MenuItem
-                            // onClick={handleLogOut}
-                            style={{ textDecoration: "none", color: "#27438e" }}
-                            >
-                            Log Out
-                        </MenuItem>
-                    </Menu>
-                    </>
-            )}
-            </Stack> */}
             </AppBar>
         </Box>
     )

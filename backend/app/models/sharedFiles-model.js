@@ -5,11 +5,14 @@ const sharedFilesSchema= new Schema({
         type: Schema.Types.ObjectId,
         ref: 'File'
     },
-    sharedWithUserId: { 
+    sharedWithUserId: [{ 
         type: Schema.Types.ObjectId, 
         ref: 'User'
-    },
-    accessExpiry: Date
+    }],
+    accessExpiry: {
+        type: Date,
+        default: null
+    }
 },{timestamps:true})
 
 const SharedFile = model('SharedFile',sharedFilesSchema)

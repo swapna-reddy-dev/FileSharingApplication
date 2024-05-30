@@ -66,7 +66,7 @@ export default function RegisterForm() {
                 })
                 toast.success("Successfully Registered!",{
                     autoClose:1000,
-                    onClose:()=>navigate('/')
+                    onClose:()=>navigate('/login')
                   });
                   setServerErrors('')
             } catch(err) {

@@ -28,4 +28,9 @@ fileRouter.post('/share',authenticateUser,checkSchema(sharedFileValidationSchema
 
 //Get all the shared files
 fileRouter.get('/sharedFiles',authenticateUser,filesCtrl.getSharedFiles)
+
+//get one shared file
+fileRouter.get('/oneFile/:id',authenticateUser,filesCtrl.oneSharedFile)
+
+
 module.exports = fileRouter

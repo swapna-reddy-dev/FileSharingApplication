@@ -7,6 +7,10 @@ import AddSharpIcon from "@mui/icons-material/AddSharp";
 import SendIcon from '@mui/icons-material/Send';
 import UploadFileForm from "./uploadFileForm";
 import ShareFileForm from "./ShareForm";
+import { useNavigate } from "react-router-dom";
+import { formatDistanceToNow, isPast } from 'date-fns';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+
 
 
 export default function Dashboard() {
@@ -17,6 +21,8 @@ export default function Dashboard() {
     const [openUpload, setOpenUpload] = useState(false)
     const [openShare, setOpenShare] = useState(false)
     const [fileId, setFileId] = useState('')
+
+    const navigate = useNavigate()
 
     const handleUploadOpen = () => {
         setOpenUpload(true)
@@ -33,6 +39,34 @@ export default function Dashboard() {
 
     const handleShareClose = () => {
         setOpenShare(false)
+    }
+    
+    const handleView = (id) => {
+      navigate(`/view-shared-file/${id}`)
+    }
+
+    const handleFileView = (id) => {
+      navigate(`/view-my-file/${id}`)
+    }
+
+    const handleSelect = async (e) => {
+      setSelectedOption(e.target.value)
+      if(e.target.value === 'sharedfiles') {
+        try {
+          setLoading(true)
+          const sharedFileResponse = await axios.get('http://localhost:3001/api/files/sharedFiles',{
+            headers: {
+              Authorization: localStorage.getItem('token')
+            }
+          })
+          console.log(sharedFileResponse.data)
+          setLoading(false)
+          sharedFilesDispatch({type: 'SET_SHARED_FILES',payload: sharedFileResponse.data})
+      } catch(err) {
+          console.log(err)
+          sharedFilesDispatch({type: 'SET_SERVER_ERRORS', payload: 'Something went wrong, Server Error encountered!'})
+      }
+      }
     }
     useEffect(()=>{
         (async function(){
@@ -52,16 +86,6 @@ export default function Dashboard() {
                 console.log(err)
                 filesDispatch({type: 'SET_SERVER_ERRORS', payload: 'Something went wrong, Server Error encountered!'})
             }
-            try {
-                setLoading(true)
-                const sharedFileResponse = await axios.get('http://localhost:3001/api/files/sharedFiles',header)
-                console.log(sharedFileResponse.data)
-                setLoading(false)
-                sharedFilesDispatch({type: 'SET_SHARED_FILES',payload: sharedFileResponse.data})
-            } catch(err) {
-                console.log(err)
-                sharedFilesDispatch({type: 'SET_SERVER_ERRORS', payload: 'Something went wrong, Server Error encountered!'})
-            }
         })();
         // eslint-disable-next-line
     },[])
@@ -79,7 +103,7 @@ export default function Dashboard() {
           <Select
             size="small"
             value={selectedOption}
-            onChange={(e)=>{setSelectedOption(e.target.value)}}
+            onChange={handleSelect}
             displayEmpty
             sx={{ minWidth: 120 }}
           >
@@ -141,16 +165,74 @@ export default function Dashboard() {
                       '&:hover': {
                         backgroundColor: "#A00DB8", // same color as the normal state
                       },
+                      marginRight: '10px'
                     }}
                   >
                     Share
                   </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={()=>{handleFileView(file._id)}}
+                    startIcon={<RemoveRedEyeIcon/>}
+                    sx={{
+                      backgroundColor: "#A00DB8",
+                      '&:hover': {
+                        backgroundColor: "#A00DB8", // same color as the normal state
+                      },
+                    }}
+                  >
+                    View 
+                  </Button>
                 </Box>
                     </Grid>
                   ))
-            ): "No files" :  sharedFiles.data.length ? (
-                sharedFiles.data.map((file) => (
-                    <Grid item xs={12} key={file._id}>
+            ): (
+              <Box
+              sx={{
+                marginTop: "10px",
+                marginLeft: "auto",
+                marginRight: 'auto',
+                justifyContent: "center",
+                bgcolor: "background.paper",
+                border: "2px ",
+                p: 4,
+                width: "40%",
+                borderRadius: "10px",
+                position: "relative",
+              }}
+              >
+                
+                <Box
+                component="img"
+                style={{
+                  display: "block",
+                  margin: "auto",
+                  height: "300px",
+                  width: "300px",
+                  maxWidth: "100%",
+                  borderRadius: "50%",
+                  objectFit: "fill",
+                }}
+                src="/NoData.jpg"
+                alt="Image"
+            />
+            <Typography
+              variant="body1"
+              fontWeight="bold"
+              textAlign="center"
+              fontSize="20px"
+              //margin="50px"
+            >You Do not have any files yet. Upload one now!</Typography>
+              </Box>
+              
+            ) :  sharedFiles.data.length ? (
+                sharedFiles.data.map((file) => {
+                  
+                  const accessExpiry = new Date(file.accessExpiry);
+                  const hasExpired = file.accessExpiry ? isPast(accessExpiry) : false;
+                  const timeLeft = !hasExpired ? formatDistanceToNow(accessExpiry, { addSuffix: true }) : null;
+                    return (<Grid item xs={12} key={file._id}>
                       <Box
                         p={2}
                         boxShadow={2}
@@ -164,25 +246,68 @@ export default function Dashboard() {
                         <Typography variant="body2" color="textSecondary">
                         {file.fileId.humanFileSize} 
                         </Typography>
+                        {file.accessExpiry && (
+                          <Typography variant="body2" color={hasExpired ? "error" : "red"}>
+                            {hasExpired ? "Access expired" : `Expires ${timeLeft}`}
+                          </Typography>
+                        )}
                     </Box>
                     <Button
                         variant="contained"
                         color="secondary"
-                        startIcon={<SendIcon/>}
-                        //onClick={() => handleShare(file)}
+                        startIcon={<RemoveRedEyeIcon/>}
+                        onClick={()=>{handleView(file._id)}}
+                        disabled={hasExpired}
                         sx={{
-                        backgroundColor: "#A00DB8",
-                        '&:hover': {
-                            backgroundColor: "#A00DB8", // same color as the normal state
-                        },
+                          backgroundColor: hasExpired ? "#CCCCCC" : "#A00DB8", // gray if expired
+                          '&:hover': {
+                            backgroundColor: hasExpired ? "#CCCCCC" : "#A00DB8", // same color as the normal state
+                          },
                         }}
-                    >
+                      >
                         View
                     </Button>
                     </Box>
-                    </Grid>
-                  ))
-            ) : "No shared files"}
+                    </Grid>)
+                  })
+            ) : (
+              <Box
+              sx={{
+                marginTop: "10px",
+                marginLeft: "auto",
+                marginRight: 'auto',
+                justifyContent: "center",
+                bgcolor: "background.paper",
+                border: "2px ",
+                p: 4,
+                width: "40%",
+                borderRadius: "10px",
+                position: "relative",
+              }}
+              >
+                
+                <Box
+                component="img"
+                style={{
+                  display: "block",
+                  margin: "auto",
+                  height: "300px",
+                  width: "300px",
+                  maxWidth: "100%",
+                  borderRadius: "50%",
+                  objectFit: "fill",
+                }}
+                src="/NoData.jpg"
+                alt="Image"
+            />
+            <Typography
+              variant="body1"
+              fontWeight="bold"
+              textAlign="center"
+              fontSize="20px"
+            >You Do not have any files that were shared with you!</Typography>
+              </Box>
+            )}
             {}
           </Grid>
         )}
