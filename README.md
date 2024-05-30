@@ -17,5 +17,15 @@ The backend is built with Node.js and Express, while the frontend is built with 
 - Responsive design
 
 <h1>Snapshots</h1>
-<img src="src/images/Screenshot (24).png"/>
+<img src="frontend/src/snapshots/Screenshot (38).png"/>
+<img src="frontend/src/snapshots/Screenshot (39).png"/>
+<img src="frontend/src/snapshots/Screenshot (42).png"/>
+<img src="frontend/src/snapshots/Screenshot (41).png"/>
+<img src="frontend/src/snapshots/Screenshot (43).png"/>
+<img src="frontend/src/snapshots/Screenshot (45).png"/>
+<img src="frontend/src/snapshots/Screenshot (46).png"/>
+<img src="frontend/src/snapshots/Screenshot (44).png"/>
+<img src="frontend/src/snapshots/Screenshot (47).png"/>
+
+
 
